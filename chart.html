@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Example</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <div id="container" style="width: 800px; height: 600px;"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var chartData = JSON.parse('{{ chart_data | tojson | safe }}');
+
+            var seriesData = chartData.map(function(item) {
+                return {
+                    name: item.title,
+                    y: 1, // You can set y to any constant value for a pie chart
+                    date: item.date // Store the date in a custom property
+                };
+            });
+
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'mayadeen news',
+                    align: 'left'
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.date}'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Paragraphs',
+                    data: seriesData
+                }]
+            });
+        });
+    </script>
+</body>
+</html>
