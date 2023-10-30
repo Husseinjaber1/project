@@ -5,17 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chart Example</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <style>
+        #data-list li {
+            margin-bottom: 50px;
+        }
+
+        .data-title {
+            font-weight: bold;
+        }
+
+        .data-date {
+            color: blue;
+        }
+        .data-author {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div id="container" style="width: 800px; height: 600px;"></div>
-
+    <div id="data-list">
+        <h2>Data List</h2>
+        <ul>
+            {% for item in chart_data %}
+                <li>
+                    <p class="data-title">Title: {{ item.title }}</p>
+                    <p>Paragraph: {{ item.paragraph }}</p>
+                    <p class="data-date">Date: {{ item.date }}</p>
+                    <p class="data-author">author: {{ item.author }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var chartData = JSON.parse('{{ chart_data | tojson | safe }}');
 
             var seriesData = chartData.map(function(item) {
                 return {
-                    name: item.title,
+                    title: item.title,
+                    author: item.author,
+                    paragraph: item.paragraph,
                     y: 1, // You can set y to any constant value for a pie chart
                     date: item.date // Store the date in a custom property
                 };
@@ -26,19 +57,19 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'mayadeen news',
+                    text: 'opinion news',
                     align: 'left'
                 },
                 plotOptions: {
                     pie: {
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.date}'
+                            format: '<b>{point.author}</b>: {point.paragraph}'
                         }
                     }
                 },
                 series: [{
-                    name: 'Paragraphs',
+                    name: 'num',
                     data: seriesData
                 }]
             });
